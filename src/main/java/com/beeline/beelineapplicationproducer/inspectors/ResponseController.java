@@ -1,9 +1,8 @@
 package com.beeline.beelineapplicationproducer.inspectors;
 
 import javax.ws.rs.core.Response;
-import java.sql.SQLException;
 
-public class ResponseController extends Archive {
+public class ResponseController extends LogInspector {
     protected ResponseController() {}
 
     protected Response getResponse (
@@ -13,15 +12,6 @@ public class ResponseController extends Archive {
         return Response.ok()
                 .status( status )
                 .entity( message )
-                .build();
-    }
-
-    protected Response getResponse (
-            final SQLException exception
-    ) {
-        return Response
-                .status( Response.Status.INTERNAL_SERVER_ERROR )
-                .entity( super.CONNECTION_ERRORS.getOrDefault( exception.getSQLState(), exception.getMessage() ) )
                 .build();
     }
 }

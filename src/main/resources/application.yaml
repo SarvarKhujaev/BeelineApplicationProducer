@@ -1,1 +1,12 @@
+server:
+  port: 9090
+  address: localhost
+
+variables:
+  KAFKA_VARIABLES:
+    KAFKA_BROKER : localhost:9092
+    GROUP_ID_FOR_KAFKA : BEELINE_APPLICATION
+
+    KAFKA_TOPICS:
+      ORDER_STORAGE_TOPIC: ORDER_STORAGE_TOPIC
 

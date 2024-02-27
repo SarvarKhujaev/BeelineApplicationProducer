@@ -1,6 +1,6 @@
 package com.beeline.beelineapplicationproducer.kafkaDataSet;
 
-import com.beeline.beelineapplication.inspectors.LogInspector;
+import com.beeline.beelineapplicationproducer.inspectors.LogInspector;
 import com.google.gson.Gson;
 
 public class SerDes extends LogInspector {

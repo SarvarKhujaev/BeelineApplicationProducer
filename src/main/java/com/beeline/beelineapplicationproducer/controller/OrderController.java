@@ -1,36 +1,29 @@
 package com.beeline.beelineapplicationproducer.controller;
 
-import com.beeline.beelineapplication.constants.postgres.PostgreSqlSchema;
-import com.beeline.beelineapplication.constants.postgres.PostgreSqlTables;
-import com.beeline.beelineapplication.database.PostgreDataControl;
-import com.beeline.beelineapplication.entities.Order;
+import com.beeline.beelineapplicationproducer.inspectors.ResponseController;
+import com.beeline.beelineapplicationproducer.kafkaDataSet.KafkaDataControl;
+import com.beeline.beelineapplicationproducer.entities.Order;
+
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 @CrossOrigin
 @RestController
 @RequestMapping( value = "/beeline-serv/api/v1/order" )
-public final class OrderController {
+public final class OrderController extends ResponseController {
     @PostMapping ( value = "/" )
     public Mono< Response > createOrder (
             @RequestBody final Order order
     ) {
-        return PostgreDataControl.getInstance().save( order );
-    }
+        if (
+                super.isCollectionNotEmpty( order.getProductList() )
+                && super.objectIsNotNull( order.getUserId() )
+        ) {
+            KafkaDataControl.getKafkaDataControl().writeOrderToKafka.accept( order );
+            return Mono.just( super.getResponse( "", javax.ws.rs.core.Response.Status.OK ) );
+        }
 
-    @GetMapping ( value = "/" )
-    public Mono< List< Order > > getAllOrders () {
-        return Mono.just(
-                PostgreDataControl
-                        .getInstance()
-                        .getAllEntities(
-                                PostgreSqlSchema.ENTITIES,
-                                PostgreSqlTables.ORDERS,
-                                Order::generate
-                        )
-        );
+        return Mono.just( super.getResponse( "", Response.Status.BAD_REQUEST ) );
     }
 }

@@ -1,9 +1,8 @@
 package com.beeline.beelineapplicationproducer.subscribers;
 
-import com.beeline.beelineapplication.inspectors.LogInspector;
-import org.reactivestreams.Subscriber;
+import com.beeline.beelineapplicationproducer.inspectors.LogInspector;
 import org.reactivestreams.Subscription;
-
+import org.reactivestreams.Subscriber;
 import java.util.function.Consumer;
 
 public final class CustomSubscriber<T> extends LogInspector implements Subscriber<T> {
